@@ -1,0 +1,81 @@
+\documentclass{article}
+
+\usepackage{graphicx, hyperref}
+
+\title{Statistical graphics:\\making information clear - and beautiful}
+\author{Jarad Niemi and Andrew Gelman}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+In the toolkit section of the March issue of Significance Magazine, Julian Champkin looked at four examples of what we would term Information Visualization (InfoVis). This time we will discuss statistical graphics where the importance has shifted from making the graphic beautiful to making it clear. In keeping with the theme of this issue, we will look at laboratory confirmed cases for the city of Harare, Zimbabwe in the face of a measles outbreak that occurred in fall 2009 and continued throughout 2010. 
+
+Prior to the outbreak, measles vaccination coverage in Zimbabwe reached 92\%. In early fall of 2009, cases were reported in a number of districts in Zimbabwe. Immediately public health officials responded to cases, received samples for testing, and vaccinated children in affected villages. By late May 2010, there were 7,754 suspected cases, 508 laboratory confirmed cases (61 of Zimbabwe's 62 districts having at least one confirmed case), and 517 deaths. The vast majority of these cases had not been vaccinated previously. From May 24th to June 2nd, a mass vaccination campaign for the whole country vaccinating more than 5 million children. As of 12 December 2010, there were a total of 13,783 suspected cases, 693 confirmed cases, and 631 deaths, but with no confirmed cases in the previous four weeks, the outbreak is assumed to have ended.
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale=1]{ExcelDefaultFigure}
+\caption{Default creation of the number of confirmed cases in Harare, Zimbabwe during the measles outbreak that began in November of 2009.}
+\label{fig:ExcelDefaultFigure}
+\end{figure}
+
+\begin{figure}[ht]
+\centering
+\includegraphics[scale=0.6]{RDefaultFigure}
+\caption{Default creation of the number of confirmed cases in Harare, Zimbabwe during the measles outbreak that began in November of 2009.}
+\label{fig:RDefaultFigure}
+\end{figure}
+
+Figures \ref{fig:ExcelDefaultFigure} and \ref{fig:RDefaultFigure} provide default versions of the cumulative confirmed measles cases in Harare as provided in the World Health Organizations Zimbabwe epidemiological bulletin. Both figures provide the basic outbreak information but not in a complete, concise, or visually appealing way. In the Excel version, no labels are given to the axes (although users could probably guess that the x-axis is date), the dates on the x-axis are vertical which makes them had to read, and the default action in Excel adds a legend that has an uninformative title and is unnecessary when only one series exists. On the positive side, in creating the \emph{default} figure in Excel, we were required to choose a chart type and our choice was a `marked line plot' and the blue color is visually appealing. In contrast, the figure made using the statistical software R (\url{http://www.r-project.org/}) required no user input whatsoever and produces a terrible `step' chart with a subset of the dates shown where it is unclear which tick mark belongs to which date.
+
+Our purpose in showing these examples is not to denigrate Excel or R, but rather to point out that using defaults to produce figures, while useful for exploratory data analysis, does not produce production quality figures.  When producing production quality figures, every decisions needs to be made consciously and with intent. In order to make these decisions two key decisions are required
+\begin{itemize}
+\item Who is your target audience?
+\item What are you trying to show?
+\end{itemize}
+Once these decisions have been made, they will guide your figure creation choices.
+
+In the Harare measles outbreak example, we are interested in showing the timing of the WHO's mass vaccination campaign relative to the outbreak in order to provide public health officials with a retrospective view of the policy decision. Since public health officials are accustomed to visualizing outbreaks as the number of infected individuals at a given time, this suggests plotting the number of new confirmed cases rather than the cumulative cases. In addition, we can subdivide the public health officials into those who are interested in this particular outbreak and those who are interested in lessons learned from this outbreak that will inform future policy. The former would likely be interested in the actual dates of this outbreak while the latter would like be more interested in the number of weeks since disease discovery. Finally, although understanding the total number of \emph{confirmed} measles cases is interesting, a more relevant quantity is the estimated actual number of cases and its associated uncertainty.
+
+Figure \ref{fig:RImprovedFigure} provides an improved version of the confirmed cases data, along with estimates and uncertainties for total cases, and mass vaccination campaign dates.
+\begin{figure}[ht]
+\centering
+\includegraphics[scale=0.6]{RImprovedFigure}
+\caption{Improved figure displaying the number of confirmed cases (black) and estimated total cases (red) in Harare, Zimbabwe during the measles outbreak that began in November of 2009 and the mass vaccination campaign (green) that was held from 24 May to 2 June.}
+\label{fig:RImprovedFigure}
+\end{figure}
+The figure seamlessly incorporates the actual confirmed measles cases with the estimated total cases in its uncertainty by adding an additional y-axis for the estimated total cases. Similarly, the figure addresses the different types of public health officials by incorporating two x-axes: one containing the actual dates of the outbreak and the other containing the weeks since measles detection.  
+Finally, the mass vaccination campaign is indicated with a solid green box that extends all the way to the two time axes for easy interpretation.
+
+Initially, we thought the bottom line of this figure was going to be that public health officials vaccinated too late as the main peak of the outbreak occurred much earlier, but after creating the figure we were surprised to see the second peak shortly after the vaccination campaign. Perhaps this is due to the associated public awareness campaign and more people reporting measles cases, but the three data points immediately after the campaign belie that hypothesis. So perhaps a second peak was on its way, but stymied by the vaccination campaign. In fairness to public health officials, the campaign included all of Zimbabwe and Harare was one of the earliest measles outbreak locations. 
+
+Most of this development was accomplished by trying to \emph{put ourselves in the shoes} of public health officials and determine what might be important to them, but we used some guiding principles along the way:
+\begin{itemize}
+\item Avoid distracting elements
+\item Use informative color to visually associate elements
+\item Keep the figure simple (and therefore interpretable)
+\end{itemize}
+As an example of avoiding distracting elements, we had initially used a marked line plot, similar to the Excel plot earlier, for the new confirmed cases data, but the resulting lines had a saw-tooth pattern that dominated the figure without providing meaningful information. We used red, a color representing emergency or danger, to combine all the figure components related to estimated total cases and green, a color representing earth and health, to combine the elements associated with the vaccination campaign. Since we are curious about the timing of the vaccination campaign relative to the outbreak, it is tempting to put the data for multiple cities into Figure  \ref{fig:RImprovedFigure}, but doing so would unnecessarily complicate the figure.
+
+Instead, the concept of \emph{small multiples} can be used to compare similar plots as shown in Figure \ref{fig:smallMultiples}. This figure shows the original Harare data along with that from Bulawayo (the second largest city in Zimbabwe), and Mashonaland (a region in northeastern Zimbabwe). We have chosen to align this figure vertically in order to emphasize the relative outbreak peaks. From this figure it is clear that Harare and Bulawayo had outbreak peaks at approximately the same time while Mashonaland's peak was later. This suggests the outbreak moved out from cities to individuals in Mashonaland. If we had wanted to emphasize the relative heights of the peaks, a horizontal series of plots would have been more useful.
+\begin{figure}[ht]
+\centering
+\includegraphics[scale=0.4]{smallMultiplesSimple}
+\caption{Figure displaying the concept of small multiples in order to compare outbreak profiles in Harare, Bulawayo, and Mashonaland with the number of confirmed cases (black) and estimated total cases (red)  during the measles outbreak that began in November of 2009 and the mass vaccination campaign (green) that was held from 24 May to 2 June.}
+\label{fig:smallMultiples}
+\end{figure}
+
+In order to create these small multiple plots, we utilized another set of guiding principles:
+\begin{itemize}
+\item keep the x and y axes on the same scale
+\item eliminate repetitive information
+\item maintain consistency across plots
+\end{itemize}
+Since the x and y axes are on the same scale the figures are immediately comparable for outbreak timing and intensity, e.g. Bulawayo had many fewer cases than Harare. It is tempting to include x and y axes, legends, and other text as in Figure \ref{fig:RImprovedFigure}, but these unnecessarily complicate small multiples so they have been removed in favor of simple labels indicating the region for each plot. If Figure \ref{fig:RImprovedFigure} was not in the document, we would suggest to label a single plot within the small multiples. In addition to the x and y axes on the small scale, we have also maintained the outbreak estimates and 95\% intervals as well as the color scheme in order to maintain consistency across the plots.
+
+We realize these figures have not been as eye-catching as the InfoVis figures in the March issue of Significance Magazine, but we hope they have been informative about the measles outbreak in Zimbabwe.  We envision a future with multi-layer interactive graphics. The public layer would be an InfoVis figure to catch the reader's attention. The reader could dive a layer deeper to obtain a statistical graphic such as those displayed in this article. Diving one more layer down would produce the data table from which both the statistical graphic and the InfoVis were produced. Each layer would be interactive allowing the reader to present the data in the way they felt most appropriate for their needs. Therefore we view InfoVis and statistical graphics as complementary tools for understanding data.
+
+
+\end{document}
